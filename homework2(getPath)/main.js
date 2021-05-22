@@ -2,7 +2,6 @@
 class PathClass {
   getNthChild(htmlEl) {
     if (!htmlEl.parentElement) return htmlEl.tagName.toLowerCase(); // если нет родителя - вернем tag
-
     // Если родитель есть, ищем, какой по счету в нем искомый ребенок и возвращаем
     const children = Array.from(htmlEl.parentElement.children);
     const index = children.findIndex((child) => child === htmlEl);
@@ -12,7 +11,7 @@ class PathClass {
 
   getPath(htmlEl) {
     // Если есть id возвращаем его
-    if (htmlEl.hasAttribute("id")) return `#${htmlEl.id}`;
+    if (htmlEl.id) return `#${htmlEl.id}`;
 
     // Ищем, какой элемент по счету в родителе
     let selector = this.getNthChild(htmlEl);
@@ -31,7 +30,7 @@ class PathClass {
         let parentSelector;
 
         // если есть родитель с id, выходим и начинаем путь с него
-        if (htmlEl.hasAttribute("id")) {
+        if (htmlEl.id) {
           selector = `#${htmlEl.id}>${selector}`;
           break;
         }
@@ -51,26 +50,6 @@ class PathClass {
   }
 }
 
-const solution = new PathClass()
-
-
-// накидываем евент для визуализации
-document.querySelector("*").addEventListener("click", (e) => {
-  e.stopPropagation();
-  e.preventDefault();
-
-  const selectorFromGetPath = solution.getPath(e.target); // селектор, который предложил getPath
-  const result = document.querySelectorAll(selectorFromGetPath); // элементы, найденные по предложенному селектору
-
-  // выводим, селектор, который предложила функция getPath
-  document.querySelector(
-    ".info-block__selector > span"
-  ).textContent = selectorFromGetPath;
-
-  // Пишем сколько найдено элементов на запрос
-  document.querySelector(".info-block__count > span").textContent =
-    (result.length).toString();
-});
-
+const solution = new PathClass();
 
 if( typeof module !== "undefined" ) module.exports = PathClass

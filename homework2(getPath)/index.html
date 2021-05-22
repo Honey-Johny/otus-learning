@@ -16,6 +16,25 @@
     }
   </style>
   <script src="./main.js"></script>
+  <script>
+    // накидываем евент для визуализации
+    document.querySelector("*").addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+
+      const selectorFromGetPath = solution.getPath(e.target); // селектор, который предложил getPath
+      const result = document.querySelectorAll(selectorFromGetPath); // элементы, найденные по предложенному селектору
+
+      // выводим, селектор, который предложила функция getPath
+      document.querySelector(
+        ".info-block__selector > span"
+      ).textContent = selectorFromGetPath;
+
+      // Пишем сколько найдено элементов на запрос
+      document.querySelector(".info-block__count > span").textContent =
+        (result.length).toString();
+    });
+  </script>
 </head>
 <body>
 <div class="info-block">
