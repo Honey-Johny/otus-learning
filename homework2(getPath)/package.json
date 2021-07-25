@@ -1,0 +1,15 @@
+{
+  "name": "homework2(getpath)",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
