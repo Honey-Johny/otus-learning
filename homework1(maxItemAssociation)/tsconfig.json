@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": [
+      "es2019"
+    ],
+    "alwaysStrict": true,
+    "module": "commonjs",
+    "experimentalDecorators": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "strict": false,
+    "outDir": "dist",
+    "noUnusedLocals": true
+  }
+}
