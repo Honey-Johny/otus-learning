@@ -2,6 +2,9 @@ import React from "react";
 import './city-card.css';
 import weatherApi from '../../api'
 import store from '../../store'
+import {
+    Link
+} from "react-router-dom";
 
 class CityCard extends React.Component {
     constructor(props) {
@@ -21,10 +24,14 @@ class CityCard extends React.Component {
             },
             isFavorite: false
         }
-        this.changeFavorites = () => {
-            store.dispatch({ type: 'favorites/add-remove', city: this.props.city })
-            this.setState({isFavorite: !this.state.isFavorite})
-        }
+        store.subscribe(() => {
+            this.setState({isFavorite: store.getState().favorites.includes(this.props.city)})
+        })
+    }
+
+    changeFavorites = (e) => {
+        e.preventDefault();
+        store.dispatch({ type: 'favorites/add-remove', city: this.props.city })
     }
 
     async componentDidMount() {
@@ -33,9 +40,10 @@ class CityCard extends React.Component {
         this.setState({isFavorite: store.getState().favorites.includes(this.props.city)})
     }
 
+
     render() {
     return(
-        <div className="city-card">
+        <Link to={`/${this.props.city.toLowerCase()}`} className="city-card">
             <div className="city-card__name">{this.props.city}</div>
             <div className="city-card__temp">
                 <img src={`https:${this.state.current.condition.icon}`} alt={this.state.current.condition.text}/>
@@ -56,28 +64,9 @@ class CityCard extends React.Component {
                           fill={this.state.isFavorite ? '#FBE739' : '#F2F3F7'}/>
                 </svg>
             </div>
-        </div>
+        </Link>
     )
     }
 }
-
-// const CityCard = (props) => {
-//     return(
-//         <div className="city-card">
-//             <div className="city-card__name">{props.city}</div>
-//             <div className="city-card__temp">
-//                 <img src="https://cdn.weatherapi.com/weather/64x64/day/296.png" alt="Light rain"/>
-//                 <div>+ 11°</div>
-//             </div>
-//             <div className="city-card__temp-feels">+ 3°</div>
-//             <div className="city-card__wind">
-//                 <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMid" viewBox="0 0 11 11"><defs/><path d="M5.5 1L9 10 5.5 7.796 2 10z" fill="#333"/></svg>
-//                 <div>WNW</div>
-//                 <div>8,61 м.c</div>
-//             </div>
-//             <div className="city-card__humidity">2 %</div>
-//         </div>
-//     )
-// }
 
 export default CityCard

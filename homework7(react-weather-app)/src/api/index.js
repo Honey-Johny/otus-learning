@@ -18,5 +18,15 @@ export default {
         } catch (error) {
             throw error;
         }
+    },
+    async searchCities(query){
+        try {
+            return await weatherApi.get('/search.json', { params: {
+                    key: key,
+                    q: query
+                } });
+        } catch (error) {
+            throw error;
+        }
     }
 }

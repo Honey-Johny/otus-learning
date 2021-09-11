@@ -7,6 +7,8 @@
     padding: 15px 20px;
     transition: all 0.3s ease;
     margin-top: 10px;
+    color: #000;
+    text-decoration: none;
 }
 
 .city-card:hover{
@@ -46,6 +48,6 @@
     margin: 0 10px;
 }
 
-.city-card__favorite svg{
-
+.city-card__favorite{
+    width: 34px;
 }

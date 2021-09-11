@@ -1,20 +1,28 @@
-import './assets/styles/common.css';
-import CityCard from "./components/cityCard/cityCard";
+import Home from "./layouts/home";
+import City from "./layouts/cityPage/city"
 
-function App() {
-  return (
-    <div className="App">
-        <div className="container">
-            <CityCard city={'Moscow'}></CityCard>
-            <CityCard city={'Washington'}></CityCard>
-            <CityCard city={'Peking'}></CityCard>
-            <CityCard city={'London'}></CityCard>
-            <CityCard city={'Paris'}></CityCard>
-            <CityCard city={'Berlin'}></CityCard>
-            <CityCard city={'Rome'}></CityCard>
-        </div>
-    </div>
-  );
+import React from "react";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
+
+export default function App() {
+    return (
+        <Router>
+            <div>
+                <Switch>
+                    <Route exact path="/">
+                        <Home />
+                    </Route>
+                    <Route path="/:id">
+                        <City />
+                    </Route>
+                </Switch>
+            </div>
+
+        </Router>
+    );
 }
-
-export default App;
