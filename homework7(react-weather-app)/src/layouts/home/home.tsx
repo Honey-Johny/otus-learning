@@ -1,18 +1,19 @@
 import React from "react";
-import '../assets/styles/common.css';
-import CityCard from "../components/cityCard/cityCard";
-import CitySearch from "../components/citySearch/citySearch"
-import store from "../store";
+import '../../assets/styles/common.css';
+import CityCard from "../../components/cityCard/cityCard";
+import CitySearch from "../../components/citySearch/citySearch"
+import store from "../../store";
+import {cityListProps, HomeState} from "./types";
 
-class CityList extends React.Component {
+class CityList extends React.Component<cityListProps> {
     render() {
-        return this.props.arr.map((city, index) => <CityCard city={city} key={index.toString()}/>)
+        return this.props.arr.map((city, index) => <CityCard city={city} key={`${city}-${index}`}/>)
     }
 }
 
-class Home extends React.Component {
-    constructor(props) {
-        super(props);
+class Home extends React.Component<{}, HomeState> {
+    constructor() {
+        super({});
         this.state = {
             popularCities: ['Moscow', 'Washington', 'Peking', 'London', 'Paris', 'Berlin', 'Rome'],
             favoriteCities: store.getState().favorites

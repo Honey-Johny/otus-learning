@@ -5,9 +5,10 @@ import store from '../../store'
 import {
     Link
 } from "react-router-dom";
+import {properties, state} from "./types";
 
-class CityCard extends React.Component {
-    constructor(props) {
+class CityCard extends React.Component<properties, state> {
+    constructor(props: properties) {
         super(props);
         this.state = {
             current: {
@@ -29,7 +30,7 @@ class CityCard extends React.Component {
         })
     }
 
-    changeFavorites = (e) => {
+    changeFavorites = (e : React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         store.dispatch({ type: 'favorites/add-remove', city: this.props.city })
     }

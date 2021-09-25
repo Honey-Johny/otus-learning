@@ -4,7 +4,8 @@ import {
 } from "react-router-dom";
 
 function City() {
-    const {id} = useParams()
+    const params: {id: string} = useParams()
+    const id = params.id
     return (
         <div>
             <h1>{id}</h1>

@@ -8,7 +8,7 @@ const weatherApi = axios.create({
 const key = "245bff99677543cf81d92901210409"
 
 export default {
-    async getCurrentWeather(city){
+    async getCurrentWeather(city: string){
         try {
             return await weatherApi.get('/current.json', { params: {
                 key: key,
@@ -19,7 +19,7 @@ export default {
             throw error;
         }
     },
-    async searchCities(query){
+    async searchCities(query: string){
         try {
             return await weatherApi.get('/search.json', { params: {
                     key: key,

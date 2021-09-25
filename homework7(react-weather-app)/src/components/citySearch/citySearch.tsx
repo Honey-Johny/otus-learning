@@ -3,10 +3,11 @@ import weatherApi from '../../api'
 import {Link} from "react-router-dom";
 import './city-search.css'
 import store from "../../store";
+import {searchedCityProps, searchedCityState, citySearchListProps, citySearchState} from "./types";
 
 
-class SearchedCity extends React.Component {
-    constructor(props) {
+class SearchedCity extends React.Component<searchedCityProps, searchedCityState> {
+    constructor(props: searchedCityProps) {
         super(props);
         this.state = {
             isFavorite: false
@@ -21,7 +22,7 @@ class SearchedCity extends React.Component {
         this.setState({isFavorite: store.getState().favorites.includes(this.props.name.split(',')[0])})
     }
 
-    changeFavorites = (e) => {
+    changeFavorites = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         store.dispatch({ type: 'favorites/add-remove', city: this.props.name.split(',')[0] })
     }
@@ -41,7 +42,7 @@ class SearchedCity extends React.Component {
     }
 }
 
-class CitySearchList extends React.Component {
+class CitySearchList extends React.Component<citySearchListProps> {
     render() {
         return this.props.arr.map((city, index) => <SearchedCity name={city.name} key={index.toString()}/>)
     }
@@ -49,36 +50,33 @@ class CitySearchList extends React.Component {
 
 
 
-class CitySearch extends React.Component{
-    constructor(props) {
-        super(props);
+class CitySearch extends React.Component<{}, citySearchState>{
+
+    search: React.FormEventHandler;
+    handleChange: React.ChangeEventHandler
+    constructor() {
+        super({})
         this.state = {
             results: [],
             value: ''
         }
 
-        this.search = async (e) => {
+        this.search = async (e: React.FormEvent) => {
             e.preventDefault();
             let response = await weatherApi.searchCities(this.state.value)
             this.setState({results: response.data})
         }
 
-        this.handleChange = (event) => {
+        this.handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             this.setState({value: event.target.value});
         }
     }
-    // async search() {
-    //
-    //     let response = await weatherApi.searchCities(this.state.value)
-    //     this.setState({current: response.data})
-    //     //this.setState({isFavorite: !this.state.isFavorite})
-    // }
 
     render() {
         return(
             <div className="city-search">
                 <form onSubmit={this.search}>
-                    <input type="text" value={this.state.value} onChange={this.handleChange}/>
+                    <input type="text" placeholder="Moscow" value={this.state.value} onChange={this.handleChange}/>
                     <button type="submit" disabled={!this.state.value.length}>Искать</button>
                 </form>
                 <CitySearchList arr={this.state.results}/>
