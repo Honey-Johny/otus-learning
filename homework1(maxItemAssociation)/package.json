@@ -1,0 +1,14 @@
+{
+  "name": "homework1-maxitemassociation",
+  "version": "1.0.0",
+  "description": "Написать алгоритм для нахождения максимального списка рекомендаций.",
+  "main": "maxItemAssociation.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^4.3.5"
+  }
+}
