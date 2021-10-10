@@ -17,9 +17,11 @@ export default function App() {
             <Route exact path="/">
               <Home />
             </Route>
-            <Route path="/:id">
-              <City />
+            <Route path="/:city" render={({match}) => (
+                <City city={match.params.city}/>
+            )}>
             </Route>
+
           </Switch>
         </div>
 

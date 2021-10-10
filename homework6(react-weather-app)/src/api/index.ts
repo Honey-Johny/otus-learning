@@ -28,5 +28,16 @@ export default {
         } catch (error) {
             throw error;
         }
+    },
+    async forecastWeather(city: string){
+        try{
+            return await weatherApi.get('/forecast.json', { params: {
+                    key: key,
+                    q: city,
+                    days: 7
+                }})
+        } catch (err){
+            throw err
+        }
     }
 }
