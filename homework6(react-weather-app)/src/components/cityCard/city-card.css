@@ -39,7 +39,6 @@
 .city-card__wind{
     display: flex;
     align-items: center;
-
 }
 
 .city-card__wind div:nth-child(2){

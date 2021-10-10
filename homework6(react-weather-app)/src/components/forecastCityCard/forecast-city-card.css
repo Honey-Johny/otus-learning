@@ -1,0 +1,29 @@
+.forecast-card-container{
+    display: flex;
+    align-items: center;
+}
+.forecast-card{
+    margin-right: 20px;
+    padding: 15px 20px;
+    border: 1px solid #E2E5EB;
+    border-radius: 6px;
+    width: 350px;
+
+}
+.forecast-card-title{
+    text-align: center;
+    font-weight: 500;
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+h1{
+    margin-bottom: 30px;
+}
+.forecast-card__weather-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.forecast-card__weather-container:not(:last-child){
+    margin-bottom: 25px;
+}
