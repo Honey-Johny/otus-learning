@@ -1,5 +1,33 @@
 <template>
-  <div class="about">
+  <div class="game">
+    <q-dialog v-model="isNotAvailableToAnswer" :persistent="true">
+      <q-card class="q-pa-md" style="width: 300px">
+        <q-card-section>
+          <div class="text-h6">Время вышло</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <div v-html="`Ваш результат: ${score} баллов.<br/>Вы решили ${statistic} примеров.`"></div>
+        </q-card-section>
+
+        <q-card-actions>
+          <q-btn
+            color="primary"
+            style="margin: 0 auto;"
+            label="На главную"
+            size="md"
+            @click="toSettings"
+          />
+          <q-btn
+            color="primary"
+            style="margin: 0 auto;"
+            label="Заново"
+            size="md"
+            @click="start"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
     <div class="row">
       <div class="col-4"></div>
       <div class="col-4">
@@ -34,23 +62,21 @@
           <q-btn
             color="primary"
             style="margin: 0 auto;"
-            label="Ответить"
+            label="Пропустить"
             size="md"
-            @click="checkAnswer"
+            @click="mainGenerator"
           />
           <q-btn
             color="primary"
             style="margin: 0 auto;"
-            label="Пропустить"
+            label="Ответить"
             size="md"
-            @click="mainGenerator"
+            @click="checkAnswer"
           />
         </div>
       </div>
       <div class="col-4"></div>
     </div>
-
-    <div>{{activeExample}}</div>
   </div>
 </template>
 
@@ -75,11 +101,6 @@ export default defineComponent({
     const seconds = ref<number>(0);
 
     const activeExample = ref<(string | number)[]>([]);
-    const errRedirect = () => {
-      if (!params.time) {
-        router.push({ name: 'settings' });
-      }
-    };
 
     const answer = ref<number | string>();
 
@@ -138,19 +159,23 @@ export default defineComponent({
     };
 
     const mainGenerator = () => {
-      const index = generateRandom(0, params.actions.length - 1);
-      switch (params.actions[index]) {
-        case 'sub':
-          activeExample.value = generateSub();
-          break;
-        case 'multi':
-          activeExample.value = generateMulti();
-          break;
-        case 'division':
-          activeExample.value = generateDiv();
-          break;
-        default:
-          activeExample.value = generateSum();
+      if (params.actions) {
+        const index = generateRandom(0, params.actions.length - 1);
+        switch (params.actions[index]) {
+          case 'sub':
+            activeExample.value = generateSub();
+            break;
+          case 'multi':
+            activeExample.value = generateMulti();
+            break;
+          case 'division':
+            activeExample.value = generateDiv();
+            break;
+          default:
+            activeExample.value = generateSum();
+        }
+      } else {
+        router.push({ name: 'settings' });
       }
     };
 
@@ -158,23 +183,30 @@ export default defineComponent({
 
     const progress = computed(() => (seconds.value / baseSeconds.value) * 100);
 
-    const isAvailableToAnswer = ref<boolean>(true);
+    const isNotAvailableToAnswer = ref<boolean>(false);
+
+    const statistic = ref<number>(0);
+
+    const score = ref<number>(0);
 
     const timerTick = () => {
       if (seconds.value - 1 === 0) {
         clearInterval(timer.value);
-        isAvailableToAnswer.value = false;
-        console.log('stop');
+        const rawRes = localStorage.getItem('results');
+        let prevResults = [];
+        if (rawRes) {
+          prevResults = JSON.parse(rawRes);
+        }
+        const newRes = { score: score.value, statistic: statistic.value };
+        prevResults.push(newRes);
+        localStorage.setItem('results', JSON.stringify(prevResults));
+        isNotAvailableToAnswer.value = true;
       } else {
         seconds.value -= 1;
       }
     };
 
     const isAnswerCorrect = ref<boolean>(true);
-
-    const statistic = ref<number>(0);
-
-    const score = ref<number>(0);
 
     const checkAnswer = () => {
       let el: number;
@@ -203,12 +235,22 @@ export default defineComponent({
       return `${strPadLeft(Math.floor(seconds.value / 60).toString(), '0', 2)}:${strPadLeft((seconds.value % 60).toString(), '0', 2)}`;
     });
 
-    onMounted(() => {
-      errRedirect();
+    const toSettings = () => {
+      router.push({ name: 'settings' });
+    };
+
+    const start = () => {
+      statistic.value = 0;
+      score.value = 0;
+      isNotAvailableToAnswer.value = false;
       mainGenerator();
       baseSeconds.value = Number(params.time) * 60;
       seconds.value = baseSeconds.value;
       timer.value = setInterval(timerTick, 1000);
+    };
+
+    onMounted(() => {
+      start();
     });
 
     watch(
@@ -230,6 +272,10 @@ export default defineComponent({
       isAnswerCorrect,
       checkAnswer,
       score,
+      isNotAvailableToAnswer,
+      statistic,
+      toSettings,
+      start,
     };
   },
 });

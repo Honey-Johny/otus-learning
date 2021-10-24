@@ -1,8 +1,7 @@
 <template>
   <div class="home">
-    <div>Лучший результат</div>
-    <div>Дата результат</div>
 
+    <div class="text-center text-h4" v-if="maxScore">{{ `Лучший результат ${maxScore} баллов` }}</div>
     <div class="container row">
       <div class="col-12">
         <h4 class="text-center">Настройки</h4>
@@ -100,6 +99,16 @@ export default defineComponent({
     const play = () => {
       router.push({ name: 'game', params: { time: gameTime.value, dif: difficulty.value, actions: actualActions.value } });
     };
+    const maxScore = computed(() => {
+      const rawRes = localStorage.getItem('results');
+      let results: {score: number, statistic: string}[] = [];
+      if (rawRes) {
+        results = JSON.parse(rawRes);
+        const scores = results.map(({ score }) => (score));
+        return Math.max(...scores);
+      }
+      return 0;
+    });
     return {
       gameTime,
       difficulty,
@@ -110,6 +119,7 @@ export default defineComponent({
       division,
       isReadyToPlay,
       play,
+      maxScore,
     };
   },
 });
